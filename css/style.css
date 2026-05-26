@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
+    * {
+        font-family: 'Inter', sans-serif;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+        overscroll-behavior-y: contain;
+        background: #000;
+    }
+    
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    
+    .feed-container {
+        scroll-snap-type: y mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .feed-item {
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+    }
+    
+    @keyframes heartBeat {
+        0% { transform: scale(0); opacity: 0; }
+        15% { transform: scale(1.2); opacity: 1; }
+        30% { transform: scale(0.95); }
+        45%, 80% { transform: scale(1); opacity: 1; }
+        100% { transform: scale(0); opacity: 0; }
+    }
+    
+    .like-animation {
+        animation: heartBeat 1s ease-in-out;
+    }
+    
+    @keyframes shimmer {
+        0% { background-position: -1000px 0; }
+        100% { background-position: 1000px 0; }
+    }
+    
+    .skeleton {
+        background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+        background-size: 1000px 100%;
+        animation: shimmer 2s infinite;
+    }
+    
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+    
+    .loader {
+        border: 3px solid rgba(255,255,255,0.1);
+        border-top-color: #fff;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 0.8s linear infinite;
+    }
+    
+    .pull-indicator {
+        transition: transform 0.3s ease;
+    }
+    
+    .carousel-dots .active {
+        background: white;
+        width: 18px;
+    }
+    
+    .toast-enter {
+        animation: slideUp 0.3s ease-out;
+    }
+    
+    @keyframes slideUp {
+        from { transform: translateY(100px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+    
+    input[type="file"]::file-selector-button {
+        display: none;
+    }
+
+        /* إصلاح الوصف فقط - بدون لمس أي شيء ثاني */
+        .swipe-desc-only {
+            display: -webkit-box !important;
+            -webkit-line-clamp: 2 !important;
+            -webkit-box-orient: vertical !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            word-break: break-word !important;
+            max-width: 100% !important;
+        }
+        
+        /* إصلاح الصورة الرئيسية في السوايب فقط */
+        .absolute.inset-0.w-full.h-full.object-cover {
+            width: 100vw !important;
+            left: 0 !important;
+            right: 0 !important;
+        }
+    
+        /* شبكة منتجات الحساب - موحدة مثل انستقرام */
+        #profileProductsGrid, #profileLikedGrid {
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 2px !important;
+            padding: 0 !important;
+        }
+        
+        /* كل صورة مربعة 100% */
+        #profileProductsGrid img, #profileLikedGrid img {
+            width: 100% !important;
+            aspect-ratio: 1/1 !important;
+            object-fit: cover !important;
+            display: block !important;
+            cursor: pointer !important;
+        }
+        
+        /* الحاوية حق كل صورة */
+        #profileProductsGrid > div, #profileLikedGrid > div {
+            position: relative !important;
+            width: 100% !important;
+            aspect-ratio: 1/1 !important;
+            overflow: hidden !important;
+        }
