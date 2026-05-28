@@ -1391,3 +1391,18 @@ function openWhatsApp(phone, productName) {
     window.open(url, '_blank');
 }
 
+//تسجيل الدخول عن طريق جوجل
+
+async function loginWithGoogle() {
+    const { error } = await supabaseClient.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+            redirectTo: 'https://swipeshop1.vercel.app'
+        }
+    });
+
+    if (error) {
+        showToast(error.message);
+    }
+}
+
