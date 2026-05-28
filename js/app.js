@@ -7,6 +7,7 @@ let feedProducts = [];
 let feedPage = 0;
 let isLoadingFeed = false;
 let currentProductDetail = null;
+let currentModalProduct = null;
 let currentFilterCategory = 'all';
 let cart = [];
 let likedProducts = new Set();
@@ -287,7 +288,7 @@ function renderFeed(products, append = true) {
                         <h3 class="font-bold text-lg mb-1">${product.name}</h3>
                         <p class="text-zinc-300 text-sm mb-2 swipe-desc-only">${product.desc || product.description || ''}</p>
                         <div class="text-2xl font-bold mb-2">$${product.price}</div>
-                        <button onclick="openWhatsApp('${product.phone || currentUser?.user_metadata?.phone || ""}', '${product.name}')" class="bg-green-500 rounded-full px-3 py-1.5 text-xs font-semibold flex items-center gap-1 w-fit">
+                        <button onclick="openWhatsApp('${product.phone || ""}', '${product.name}')" class="bg-green-500 rounded-full px-3 py-1.5 text-xs font-semibold flex items-center gap-1 w-fit">
                             <i class="fa-brands fa-whatsapp"></i> واتساب
                         </button>
                     </div>
@@ -700,6 +701,7 @@ function checkout() {
 // Product Detail
 function showProductDetail(product) {
     currentProductDetail = product;
+    currentModalProduct = product;
     document.getElementById('productModal').classList.remove('hidden');
     const images = Array.isArray(product.images) ? product.images : [product.images];
     
@@ -786,7 +788,7 @@ function showProductDetail(product) {
                 <button onclick='addToCart(${JSON.stringify(product).replace(/"/g, '&quot;')}); closeProductModal()' class="bg-gradient-to-r from-pink-500 to-violet-500 rounded-xl py-3 font-semibold">
                     Add to Cart
                 </button>
-                <button onclick="openWhatsApp('${product.phone || currentUser?.user_metadata?.phone || ''}', '${product.name}')" class="bg-green-500 rounded-xl py-3 font-semibold flex items-center justify-center gap-2">
+                <button onclick="openWhatsApp('${product.phone || ''}', '${product.name}')" class="bg-green-500 rounded-xl py-3 font-semibold flex items-center justify-center gap-2">
                     <i class="fa-brands fa-whatsapp text-xl"></i> WhatsApp
                 </button>
             </div>
@@ -807,7 +809,7 @@ function shareProduct(product) {
 }
 
 function shareCurrentProduct() {
-    if (currentProductDetail) shareProduct(currentProductDetail);
+    if (currentModalProduct) shareProduct(currentModalProduct);
 }
 
 // ===== خوارزمية البحث المتطورة =====
@@ -1338,12 +1340,7 @@ CREATE POLICY "Auth upload" ON storage.objects FOR INSERT WITH CHECK (auth.uid()
 // فتح واتساب مع رقم البائع
 function openWhatsApp(phone, productName) {
     if (!phone) {
-        // جيب رقم البائع من البروفايل الحالي
-        phone = currentUser?.user_metadata?.phone || '';
-    }
-    
-    if (!phone) {
-        showToast('رقم الواتساب غير متوفر - أضفه في البروفايل');
+        showToast('رقم الواتساب غير متوفر - لم يضف البائع رقمه');
         return;
     }
     
