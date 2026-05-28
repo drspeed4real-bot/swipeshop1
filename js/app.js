@@ -1,6 +1,15 @@
 
 // Config loaded from js/supabase-config.js
 
+const RECAPTCHA_SITE_KEY = '6LfwYgEtAAAAALHy318jd1O3yEGdNiOQsNSoYdkO';
+let loginRecaptchaId = null;
+let signupRecaptchaId = null;
+
+function onRecaptchaLoad() {
+    loginRecaptchaId = grecaptcha.render('loginRecaptcha', { sitekey: RECAPTCHA_SITE_KEY });
+    signupRecaptchaId = grecaptcha.render('signupRecaptcha', { sitekey: RECAPTCHA_SITE_KEY });
+}
+
 let currentUser = null;
 let currentPage = 'feed';
 let feedProducts = [];
@@ -68,20 +77,29 @@ async function handleSignup() {
     const email = document.getElementById('signupEmail').value;
     const password = document.getElementById('signupPassword').value;
     const username = document.getElementById('signupUsername').value;
-    
+
     if (!email || !password || !username) {
         showToast('Please fill all fields');
         return;
     }
-    
+
+    const recaptchaToken = signupRecaptchaId !== null ? grecaptcha.getResponse(signupRecaptchaId) : '';
+    if (!recaptchaToken) {
+        showToast('Please complete the reCAPTCHA');
+        return;
+    }
+
     const { data, error } = await supabaseClient.auth.signUp({
         email, password,
         options: { data: { username, avatar: `https://ui-avatars.com/api/?name=${username}&background=ec4899&color=fff` } }
     });
-    
-    if (error) showToast(error.message);
-    else {
+
+    if (error) {
+        showToast(error.message);
+        grecaptcha.reset(signupRecaptchaId);
+    } else {
         showToast('Account created! Please check your email');
+        grecaptcha.reset(signupRecaptchaId);
         toggleAuthForm();
     }
 }
@@ -89,9 +107,20 @@ async function handleSignup() {
 async function handleLogin() {
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
-    
+
+    const recaptchaToken = loginRecaptchaId !== null ? grecaptcha.getResponse(loginRecaptchaId) : '';
+    if (!recaptchaToken) {
+        showToast('Please complete the reCAPTCHA');
+        return;
+    }
+
     const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
-    if (error) showToast(error.message);
+    if (error) {
+        showToast(error.message);
+        grecaptcha.reset(loginRecaptchaId);
+    } else {
+        grecaptcha.reset(loginRecaptchaId);
+    }
 }
 
 async function handleLogout() {
