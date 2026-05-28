@@ -102,24 +102,4 @@
 
 
 
-    import { createClient } from '@supabase/supabase-js'
-
-// تهيئة Supabase (استبدل الروابط بالمفاتيح الخاصة بمشروعك)
-const supabaseUrl = 'YOUR_SUPABASE_URL'
-const supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY'
-const supabase = createClient(supabaseUrl, supabaseAnonKey)
-
-async function signInWithGoogle() {
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: {
-      // اختياري: المكان الذي سيعود إليه المستخدم بعد نجاح تسجيل الدخول
-      redirectTo: 'https://your-website.com/dashboard', 
-    },
-  })
-
-  if (error) {
-    console.error('حدث خطأ أثناء تسجيل الدخول:', error.message)
-  }
-}
     
