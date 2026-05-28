@@ -1,7 +1,7 @@
 
 // Config loaded from js/supabase-config.js
 
-const RECAPTCHA_SITE_KEY = '6LfwYgEtAAAAALHy318jd1O3yEGdNiOQsNSoYdkO';
+const RECAPTCHA_SITE_KEY = '6LehiQEtAAAAAB2y9gnyxergO6MfHPdDjaaFQbmO';
 let loginRecaptchaId = null;
 let signupRecaptchaId = null;
 
@@ -1379,7 +1379,7 @@ function openWhatsApp(phone, productName) {
     // لو ما فيه +، ضيف كود السعودية افتراضي
     if (!phone.startsWith('+') && !phone.startsWith('00')) {
         if (phone.startsWith('0')) phone = phone.substring(1);
-        phone = '966' + phone; // غير الكود حسب بلدك
+        phone = '218' + phone; // غير الكود حسب بلدك
     } else if (phone.startsWith('+')) {
         phone = phone.substring(1);
     } else if (phone.startsWith('00')) {
