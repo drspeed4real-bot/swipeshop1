@@ -833,9 +833,24 @@ function closeProductModal() {
 
 // Share
 function shareProduct(product) {
-   const url = `${window.location.origin}/?product=${product.id || product.name}`;
-    navigator.clipboard.writeText(url);
-    showToast('Link copied!');
+    // ← غيّر هذا برابط Worker الخاص بك بعد النشر
+    const WORKER_URL = 'https://damp-boat-35cd.drspeed4real.workers.dev';
+    
+    const url = `${WORKER_URL}/?product=${product.id || encodeURIComponent(product.name)}`;
+    
+    if (navigator.share) {
+        navigator.share({
+            title: product.name,
+            text: product.desc || product.description || '',
+            url: url
+        }).catch(() => {
+            navigator.clipboard.writeText(url);
+            showToast('تم نسخ الرابط!');
+        });
+    } else {
+        navigator.clipboard.writeText(url);
+        showToast('تم نسخ الرابط!');
+    }
 }
 
 function shareCurrentProduct() {
