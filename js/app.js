@@ -154,6 +154,7 @@ function showApp() {
     loadFeed();
     setupPullToRefresh();
     setupRealtime();
+    checkDeepLink();
 }
 
 // Page Navigation
@@ -832,7 +833,7 @@ function closeProductModal() {
 
 // Share
 function shareProduct(product) {
-    const url = `${window.location.origin}?product=${product.id || product.name}`;
+   const url = `${window.location.origin}/?product=${product.id || product.name}`;
     navigator.clipboard.writeText(url);
     showToast('Link copied!');
 }
@@ -1286,7 +1287,22 @@ function setupRealtime() {
         })
         .subscribe();
 }
+async function checkDeepLink() {
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get('product');
 
+    if (!productId) return;
+
+    const { data } = await supabaseClient
+        .from('products')
+        .select('*')
+        .eq('id', productId)
+        .single();
+
+    if (data) {
+        setTimeout(() => showProductDetail(data), 500);
+    }
+}
 // Utilities
 function showToast(msg) {
     const toast = document.getElementById('toast');
