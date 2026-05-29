@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Store",
+  "name": "SwipeShop",
+  "url": "https://swipeshop1.vercel.app/",
+  "description": "Online shopping store for fast and easy product browsing.",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://swipeshop1.vercel.app/?search={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
   <title>SwipeShop - Online Shopping Store</title>
 
 <meta charset="UTF-8">
@@ -375,5 +390,13 @@ class="group relative overflow-hidden w-full flex items-center justify-center ga
     <script src="js/supabase-config.js"></script>
     <script src="js/app.js"></script>
     <script src="js/profile.js"></script>
+
+
+  <script>
+  // تحسين تحميل الصور (lazy loading)
+  document.querySelectorAll("img").forEach(img => {
+    img.loading = "lazy";
+  });
+</script>
 </body>
 </html>
