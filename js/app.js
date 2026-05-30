@@ -35,27 +35,25 @@ const demoProducts = [
     { name: 'Minimalist Lamp', desc: 'Modern design for your workspace', price: 79, category: 'home', images: ['https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=800'], username: 'HomeStyle', avatar: 'https://i.pravatar.cc/150?img=20' }
 ];
 
-// Init
+// Init — يعرض الصفحة الرئيسية للجميع، سواء مسجل أو لا
 (async () => {
     const { data: { session } } = await supabaseClient.auth.getSession();
     if (session) {
         currentUser = session.user;
         await loadUserProfile();
-        showApp();
-    } else {
-        document.getElementById('loadingScreen').classList.add('hidden');
-        showAuth();
     }
+    showApp(); // دائماً يفتح التطبيق مباشرة
 })();
 
 supabaseClient.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_IN') {
         currentUser = session.user;
         loadUserProfile();
-        showApp();
+        // أغلق نافذة البوابة إن كانت مفتوحة
+        closeGateModal();
     } else if (event === 'SIGNED_OUT') {
         currentUser = null;
-        showAuth();
+        // لا نعيد توجيهه لصفحة تسجيل الدخول — يبقى في الفيد
     }
 });
 
@@ -65,8 +63,28 @@ function showAuth() {
     document.getElementById('app').classList.add('hidden');
 }
 
+// بوابة تسجيل الدخول — popup يظهر للزوار عند محاولة تفاعل
+function showGateModal() {
+    document.getElementById('gateModal').classList.remove('hidden');
+}
+
+function closeGateModal() {
+    const gate = document.getElementById('gateModal');
+    if (gate) gate.classList.add('hidden');
+}
+
+function requireAuth(action) {
+    if (!currentUser) {
+        showGateModal();
+        return false;
+    }
+    return true;
+}
+
 function closeAuth() {
     document.getElementById('authModal').classList.add('hidden');
+    // تأكد أن التطبيق ظاهر
+    document.getElementById('app').classList.remove('hidden');
 }
 
 function toggleAuthForm() {
@@ -159,6 +177,8 @@ function showApp() {
 
 // Page Navigation
 function showPage(page, triggerBtn) {
+    // الصفحات التي تحتاج تسجيل دخول
+    if ((page === 'create' || page === 'profile') && !requireAuth()) return;
     document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
     document.getElementById(page + 'Page').classList.remove('hidden');
     
@@ -261,6 +281,15 @@ async function loadFeed(refresh = false) {
     if (error || !data || data.length === 0) {
         products = demoProducts;
         if (feedPage === 0) showToast('Demo mode — Connect Supabase to see real products');
+    }
+
+    // عند الريفريش: خلط عشوائي كامل أولاً ثم تطبيق الخوارزمية
+    if (refresh) {
+        // Fisher-Yates shuffle للعشوائية الحقيقية
+        for (let i = products.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [products[i], products[j]] = [products[j], products[i]];
+        }
     }
 
     // ترتيب المنتجات بالخوارزمية الذكية
@@ -487,6 +516,7 @@ function handleDoubleTap(productId) {
 }
 
 async function toggleLike(productId, btn) {
+    if (!requireAuth()) return;
     const icon = btn.querySelector('i');
     const countEl = btn.querySelector('span');
     const isLiked = likedProducts.has(productId);
@@ -577,6 +607,7 @@ function setupPullToRefresh() {
 
 // Comments
 function showComments(productId) {
+    if (!requireAuth()) return;
     currentProductDetail = productId;
     document.getElementById('commentsDrawer').classList.remove('hidden');
     loadComments(productId);
