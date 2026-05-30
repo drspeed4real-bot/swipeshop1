@@ -317,7 +317,7 @@ function renderFeed(products, append = true) {
                         </div>
                         <h3 class="font-bold text-lg mb-1">${product.name}</h3>
                         <p class="text-zinc-300 text-sm mb-2 swipe-desc-only">${product.desc || product.description || ''}</p>
-                        <div class="text-2xl font-bold mb-2">$${product.price}</div>
+                        <div class="text-2xl font-bold mb-2">LYD${product.price}</div>
                         <button onclick="openWhatsApp('${product.phone || ""}', '${product.name}')" class="bg-green-500 rounded-full px-3 py-1.5 text-xs font-semibold flex items-center gap-1 w-fit">
                             <i class="fa-brands fa-whatsapp"></i> واتساب
                         </button>
@@ -695,7 +695,7 @@ function renderCart() {
                 <img src="${Array.isArray(item.images) ? item.images[0] : item.images}" class="w-20 h-20 rounded-lg object-cover">
                 <div class="flex-1">
                     <div class="font-semibold text-sm mb-1">${item.name}</div>
-                    <div class="text-pink-500 font-bold">$${item.price}</div>
+                    <div class="text-pink-500 font-bold">LYD${item.price}</div>
                     <div class="flex items-center gap-2 mt-2">
                         <button onclick="updateCartQty(${idx}, -1)" class="bg-zinc-800 w-7 h-7 rounded flex items-center justify-center"><i class="fa-solid fa-minus text-xs"></i></button>
                         <span class="text-sm">${item.qty}</span>
