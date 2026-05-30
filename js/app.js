@@ -317,7 +317,7 @@ function renderFeed(products, append = true) {
                         </div>
                         <h3 class="font-bold text-lg mb-1">${product.name}</h3>
                         <p class="text-zinc-300 text-sm mb-2 swipe-desc-only">${product.desc || product.description || ''}</p>
-                        <div class="text-2xl font-bold mb-2">LYD${product.price}</div>
+                        <div class="text-2xl font-bold mb-2">$${product.price}</div>
                         <button onclick="openWhatsApp('${product.phone || ""}', '${product.name}')" class="bg-green-500 rounded-full px-3 py-1.5 text-xs font-semibold flex items-center gap-1 w-fit">
                             <i class="fa-brands fa-whatsapp"></i> واتساب
                         </button>
