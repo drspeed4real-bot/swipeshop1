@@ -1422,14 +1422,6 @@ function openWhatsApp(phone, productName) {
     window.open(url, '_blank');
 }
 
-//ADS ADESTTRA 
-
-<script src="https://pl29590819.effectivecpmnetwork.com/ed/78/66/ed7866fb9e585fd0b0cdba396df66ac1.js"></script>
-<script src="https://pl29590818.effectivecpmnetwork.com/21/cf/40/21cf402bc31e07bbe3c129c4e213e3e6.js"></script>
-<script async="async" data-cfasync="false" src="https://pl29590820.effectivecpmnetwork.com/3991dd9db6e74fdb9f777878742bfa5a/invoke.js"></script>
-<div id="container-3991dd9db6e74fdb9f777878742bfa5a"></div>
-
-
 //تسجيل الدخول عن طريق جوجل
 
 async function loginWithGoogle() {
