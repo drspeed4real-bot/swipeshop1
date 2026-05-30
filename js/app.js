@@ -795,7 +795,7 @@ function showProductDetail(product) {
         <div class="p-4 space-y-4">
             <div>
                 <h2 class="text-2xl font-bold mb-2">${product.name}</h2>
-                <div class="text-3xl font-bold text-pink-500">$${product.price}</div>
+                <div class="text-3xl font-bold text-pink-500">LYD${product.price}</div>
             </div>
             
             <div class="flex items-center gap-3 pb-4 border-b border-zinc-900">
@@ -944,7 +944,7 @@ async function loadSearchResults() {
                 <div class="font-semibold text-sm truncate">${highlightText(p.name, query)}</div>
                 <div class="text-zinc-400 text-xs truncate mt-0.5">${highlightText(desc, query)}</div>
                 <div class="flex items-center justify-between mt-2">
-                    <div class="text-pink-500 font-bold">$${p.price}</div>
+                    <div class="text-pink-500 font-bold">LYD${p.price}</div>
                     <div class="text-zinc-500 text-xs flex items-center gap-1">
                         <i class="fa-solid fa-heart text-pink-400/60"></i> ${p.likes || 0}
                     </div>
