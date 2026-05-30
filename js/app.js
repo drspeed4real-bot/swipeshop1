@@ -276,12 +276,11 @@ async function loadFeed(refresh = false) {
     }
 
     // خلط عشوائي عند الريفريش
-    if (refresh) {
-        for (let i = products.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [products[i], products[j]] = [products[j], products[i]];
-        }
-    }
+// خلط عشوائي دائماً — مش فقط عند الريفريش
+for (let i = products.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [products[i], products[j]] = [products[j], products[i]];
+}
 
     // ترتيب المنتجات بالخوارزمية الذكية
     const scored = products
