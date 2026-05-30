@@ -60,7 +60,7 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
 // Auth Functions
 function showAuth() {
     document.getElementById('authModal').classList.remove('hidden');
-    document.getElementById('app').classList.add('hidden');
+  
 }
 
 // بوابة تسجيل الدخول — popup يظهر للزوار عند محاولة تفاعل
