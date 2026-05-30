@@ -1,4 +1,3 @@
-
 // Config loaded from js/supabase-config.js
 
 const RECAPTCHA_SITE_KEY = '6LehiQEtAAAAAB2y9gnyxergO6MfHPdDjaaFQbmO';
@@ -35,35 +34,41 @@ const demoProducts = [
     { name: 'Minimalist Lamp', desc: 'Modern design for your workspace', price: 79, category: 'home', images: ['https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=800'], username: 'HomeStyle', avatar: 'https://i.pravatar.cc/150?img=20' }
 ];
 
-// Init — يعرض الصفحة الرئيسية للجميع، سواء مسجل أو لا
+// Init
 (async () => {
     const { data: { session } } = await supabaseClient.auth.getSession();
     if (session) {
         currentUser = session.user;
         await loadUserProfile();
     }
-    showApp(); // دائماً يفتح التطبيق مباشرة
+    showApp(); // يفتح للجميع سواء مسجل أو لا
 })();
 
-supabaseClient.auth.onAuthStateChange((event, session) => {
+supabaseClient.auth.onAuthStateChange(async (event, session) => {
     if (event === 'SIGNED_IN') {
         currentUser = session.user;
-        loadUserProfile();
-        // أغلق نافذة البوابة إن كانت مفتوحة
-        closeGateModal();
+        await loadUserProfile();
+        document.getElementById('authModal').classList.add('hidden');
+        document.getElementById('gateModal')?.classList.add('hidden');
+        document.getElementById('app').classList.remove('hidden');
+        showToast('مرحباً! 👋');
     } else if (event === 'SIGNED_OUT') {
         currentUser = null;
-        // لا نعيد توجيهه لصفحة تسجيل الدخول — يبقى في الفيد
+        // يبقى في الفيد بدون إعادة توجيه
     }
 });
 
-// Auth Functions
 function showAuth() {
     document.getElementById('authModal').classList.remove('hidden');
-  
+    // لا نخفي التطبيق
 }
 
-// بوابة تسجيل الدخول — popup يظهر للزوار عند محاولة تفاعل
+function closeAuth() {
+    document.getElementById('authModal').classList.add('hidden');
+    document.getElementById('app').classList.remove('hidden');
+}
+
+// بوابة تسجيل الدخول للزوار
 function showGateModal() {
     document.getElementById('gateModal').classList.remove('hidden');
 }
@@ -73,18 +78,12 @@ function closeGateModal() {
     if (gate) gate.classList.add('hidden');
 }
 
-function requireAuth(action) {
+function requireAuth() {
     if (!currentUser) {
         showGateModal();
         return false;
     }
     return true;
-}
-
-function closeAuth() {
-    document.getElementById('authModal').classList.add('hidden');
-    // تأكد أن التطبيق ظاهر
-    document.getElementById('app').classList.remove('hidden');
 }
 
 function toggleAuthForm() {
@@ -177,7 +176,6 @@ function showApp() {
 
 // Page Navigation
 function showPage(page, triggerBtn) {
-    // الصفحات التي تحتاج تسجيل دخول
     if ((page === 'create' || page === 'profile') && !requireAuth()) return;
     document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
     document.getElementById(page + 'Page').classList.remove('hidden');
@@ -283,9 +281,8 @@ async function loadFeed(refresh = false) {
         if (feedPage === 0) showToast('Demo mode — Connect Supabase to see real products');
     }
 
-    // عند الريفريش: خلط عشوائي كامل أولاً ثم تطبيق الخوارزمية
+    // خلط عشوائي عند الريفريش
     if (refresh) {
-        // Fisher-Yates shuffle للعشوائية الحقيقية
         for (let i = products.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [products[i], products[j]] = [products[j], products[i]];
@@ -1459,7 +1456,7 @@ async function loginWithGoogle() {
     const { error } = await supabaseClient.auth.signInWithOAuth({
         provider: 'google',
         options: {
-            redirectTo: 'https://swipeshop1.vercel.app'
+            redirectTo: window.location.origin
         }
     });
 
@@ -1467,4 +1464,3 @@ async function loginWithGoogle() {
         showToast(error.message);
     }
 }
-
