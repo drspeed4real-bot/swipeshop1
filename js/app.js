@@ -230,31 +230,25 @@ async function recordView(productId) {
 }
 
 // حساب نقاط المنتج بناءً على اهتمامات المستخدم
+// seed عشوائي جديد في كل تحميل للصفحة
+const sessionSeed = Math.random() * 1000000;
+
 function scoreProduct(product) {
     let score = 0;
-
-    // عامل التفاعل (likes + comments + views)
     const likes = product.likes || 0;
     const comments = product.comments || 0;
     const views = product.views || 1;
     const engagementRate = (likes + comments * 2) / Math.max(views, 1);
     score += engagementRate * 50;
-
-    // عامل الحداثة — المنتجات الجديدة تأخذ أولوية
     const createdAt = product.created_at ? new Date(product.created_at) : new Date(0);
     const ageHours = (Date.now() - createdAt.getTime()) / 3600000;
     score += Math.max(0, 100 - ageHours * 0.5);
-
-    // عامل الاهتمام الشخصي
     const catScore = userInterests[product.category] || 0;
     score += catScore * 30;
-
-    // عامل عشوائي (للتنوع — مثل TikTok)
-    score += Math.random() * 20;
-
-    // عقوبة المنتجات المشاهدة
+    // عشوائية حقيقية مختلفة لكل منتج في كل جلسة
+    const productHash = (String(product.id || product.name).split('').reduce((a, c) => a + c.charCodeAt(0), 0));
+    score += ((productHash * sessionSeed) % 100);
     if (viewedProducts.has(product.id)) score -= 200;
-
     return score;
 }
 
