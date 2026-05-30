@@ -73,7 +73,7 @@
     </div>
 
     <!-- Auth Modal -->
-    <div id="authModal" class="fixed inset-0 bg-black/95 z-[90] hidden flex items-center justify-center p-4">
+    <div id="authModal" class="fixed inset-0 bg-black/95 z-[90] hidden flex items-center justify-center p-4" onclick="if(event.target===this)closeAuth()">
         <div class="bg-zinc-900 rounded-3xl w-full max-w-md p-8 relative">
             <button onclick="closeAuth()" class="absolute top-4 right-4 text-zinc-400 hover:text-white">
                 <i class="fa-solid fa-xmark text-xl"></i>
@@ -349,8 +349,34 @@ class="group relative overflow-hidden w-full flex items-center justify-center ga
         </div>
     </div>
 
-    <!-- Toast -->
-    <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-zinc-800 px-6 py-3 rounded-full text-sm font-semibold z-[95] hidden toast-enter"></div>
+    <!-- Gate Modal — بوابة تسجيل الدخول للزوار -->
+    <div id="gateModal" class="fixed inset-0 bg-black/80 z-[95] hidden flex items-center justify-center p-4" onclick="closeGateModal()">
+        <div class="bg-zinc-900 rounded-3xl w-full max-w-sm p-8 relative text-center" onclick="event.stopPropagation()">
+            <button onclick="closeGateModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            
+            <div class="text-5xl mb-4">🔒</div>
+            <div class="text-2xl font-extrabold bg-gradient-to-r from-pink-500 to-violet-500 bg-clip-text text-transparent mb-2">
+                SwipeShop
+            </div>
+            <p class="text-zinc-300 text-sm mb-2 font-semibold">سجّل دخولك للمتابعة</p>
+            <p class="text-zinc-500 text-xs mb-6">يجب تسجيل الدخول لإضافة لايك، التعليق، نشر منتج، أو الوصول لحسابك</p>
+            
+            <button onclick="closeGateModal(); document.getElementById('authModal').classList.remove('hidden');" 
+                    class="w-full bg-gradient-to-r from-pink-500 to-violet-500 rounded-xl py-3 font-semibold hover:opacity-90 transition mb-3">
+                تسجيل الدخول
+            </button>
+            <button onclick="closeGateModal(); document.getElementById('authModal').classList.remove('hidden'); setTimeout(toggleAuthForm, 100);" 
+                    class="w-full bg-zinc-800 rounded-xl py-3 font-semibold hover:bg-zinc-700 transition text-sm">
+                إنشاء حساب جديد
+            </button>
+            
+            <p class="text-zinc-600 text-xs mt-4">يمكنك تصفح المنتجات بدون تسجيل</p>
+        </div>
+    </div>
+
+
 
 
 
